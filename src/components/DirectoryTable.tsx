@@ -12,7 +12,7 @@ import {
 	Typography,
 	useTheme
 } from '@mui/material';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 import { Record } from 'pocketbase';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import FileItemRow from './FileItemRow';

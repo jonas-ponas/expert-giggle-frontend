@@ -11,8 +11,7 @@ import {
 	useTheme
 } from '@mui/material';
 import jsQr from 'jsqr';
-import { QrCode } from '@mui/icons-material';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 
 export default function ConnectDialog(props: { open: boolean; onClose: (error?: string) => void }) {
 	const theme = useTheme();

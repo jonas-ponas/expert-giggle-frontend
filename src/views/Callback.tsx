@@ -2,12 +2,12 @@ import { Alert, AlertTitle, Box, Container, Typography, useTheme } from '@mui/ma
 import { ClientResponseError } from 'pocketbase';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 
-// const REDIRECT_URI = 'https://coach.ponas.dev/callback'
-const REDIRECT_URI = 'http://localhost:5173/callback';
-// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
-const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
+const REDIRECT_URI = 'https://coach.ponas.dev/callback'
+// const REDIRECT_URI = 'http://localhost:5173/callback';
+const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
+// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
 
 export default function Callback() {
 	const theme = useTheme();

@@ -1,7 +1,7 @@
 import { FolderDeleteTwoTone, HelpCenterTwoTone, LogoutTwoTone } from '@mui/icons-material';
 import { Avatar, Menu, useTheme, MenuItem, IconButton, ListItemIcon } from '@mui/material';
 import React, { useContext, useState } from 'react';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 import InformationDialog from './InformationDialog';
 
 export default function UserAvatar(props: {}) {

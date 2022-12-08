@@ -12,7 +12,7 @@ import {
 	useTheme
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 import DirectoryTable from '../components/DirectoryTable';
 import PathBreadcrumb from '../components/PathBreadcrump';
 import SyncDialog from '../components/SyncDialog';

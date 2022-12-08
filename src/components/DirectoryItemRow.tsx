@@ -3,7 +3,7 @@ import { Record } from 'pocketbase';
 import { IconButton, Link, ListItemIcon, Menu, MenuItem, TableCell, TableRow, useTheme } from '@mui/material';
 import { AccountTreeTwoTone, FolderTwoTone, MoreVert, PinTwoTone, PushPinTwoTone } from '@mui/icons-material';
 import verbalizeDate from '../util/verbalizeDate';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 
 export default function DirectoryItemRow({ record }: { record: Record }) {
 	const theme = useTheme();

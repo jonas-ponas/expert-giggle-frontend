@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, CircularProgress, LinearProgress, Typography, useTheme } from '@mui/material';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 import { ErrorOutline } from '@mui/icons-material';
 
 const messages = {

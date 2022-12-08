@@ -1,9 +1,9 @@
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
-import Login from './routes/Login';
+import Login from './views/Login';
 import PocketBase from 'pocketbase';
-import PocketBaseContext from './hooks/PocketbaseContext';
-import Callback from './routes/Callback';
-import Home from './routes/Home';
+import PocketBaseContext from './util/PocketbaseContext';
+import Callback from './views/Callback';
+import Home from './views/Home';
 
 const client = new PocketBase('https://coach.ponas.dev');
 

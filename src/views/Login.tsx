@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, Box, Paper, Typography, useTheme, Divider, Button, Avatar } from '@mui/material';
-import PocketBaseContext from '../hooks/PocketbaseContext';
+import PocketBaseContext from '../util/PocketbaseContext';
 import { AuthMethodsList, AuthProviderInfo } from 'pocketbase';
 
-// const GOOGLE_REDIRECT_URI = 'https://coach.ponas.dev/callback'
-const GOOGLE_REDIRECT_URI = 'http://localhost:5173/callback';
-const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
-// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
+const GOOGLE_REDIRECT_URI = 'https://coach.ponas.dev/callback'
+// const GOOGLE_REDIRECT_URI = 'http://localhost:5173/callback';
+// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
+const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
 
 export default function Login(props: {}) {
 	const theme = useTheme();
