@@ -11,12 +11,11 @@ export default function Brandbar(props: {}) {
 			sx={{
 				bgcolor: theme.palette.primary.main,
 				color: theme.palette.primary.contrastText,
-				width: '100vw',
+				// width: `calc(100vw - ${theme.spacing(2)} - ${theme.spacing(2)} - ${theme.spacing(1)})`,
 				height: 50,
 				display: 'flex',
 				pl: theme.spacing(2),
 				pr: theme.spacing(2),
-				pt: theme.spacing(0.5),
 				boxShadow: theme.shadows[10]
 			}}>
 			<Box

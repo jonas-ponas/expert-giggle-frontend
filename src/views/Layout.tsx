@@ -11,36 +11,46 @@ export default function Layout(props: {}) {
 	const theme = useTheme();
 
     const contentHeight = `calc(100vh - 55px - ${theme.spacing(0.5)})` // FIXME
+    const contentWidth = `calc(100vw - ${theme.spacing(2)} - ${theme.spacing(2)})`
 	return (
-		<Box>
+		<Box sx={{
+            bgcolor: theme.palette.grey[50],
+            height: '100vh',
+            width: '100vw',
+            maxHeight: '100%',
+            maxWidth: '100%',
+            // overflowX: 'hidden',
+
+            // width: '100vw'
+        }}>
 			<Brandbar />
 			<Grid container sx={{
-                bgcolor: theme.palette.grey[50],
-                height: contentHeight,
-                overflowX: 'hidden'
-            }}>
+                maxHeight: '100%',
+                maxWidth: '100%',
+                width: '100vw',
+                p: theme.spacing(2),
+                ml: 0
+            }} columnSpacing={2}>
                 <Grid item lg={2}>
                     <Navigation />
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        mt: theme.spacing(2),
+                        mt: theme.spacing(1)
                     }}>
                         <Link variant='body2' sx={{
-                            color: theme.palette.grey[500],
-                            textDecorationColor: theme.palette.grey[500]
-                        }} href='https://github.com/jonas-ponas/expert-giggle-frontend/' target='_blank'>
-                        Report a Bug
+                            color: theme.palette.grey[400],
+                            textDecorationColor: theme.palette.grey[400]
+                        }} href='https://github.com/jonas-ponas/expert-giggle-frontend/issues/new/choose' target='_blank'>
+                        Fehler melden / Feedback
                         </Link>
-                        <Typography variant='body2' sx={{
-                            color: theme.palette.grey[300]
-                        }}>
-                            © Jonas Heilemann
-                        </Typography>
                     </Box>
                 </Grid>
-                <Grid item lg={10}>
+                <Grid item lg={10} sx={{
+                    height: `calc(100vh - (2 * ${theme.spacing(2)}) - 55px)`,
+                    overflowY: 'auto'
+                }}>
                 <Outlet />
                 </Grid>
             </Grid>

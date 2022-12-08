@@ -1,17 +1,18 @@
 import { Alert, AlertTitle, Box, Container, Typography, useTheme } from '@mui/material';
 import { ClientResponseError } from 'pocketbase';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { usePocketbase } from '../util/PocketbaseContext';
 
-const REDIRECT_URI = 'https://coach.ponas.dev/callback'
-// const REDIRECT_URI = 'http://localhost:5173/callback';
-const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
-// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
+// const REDIRECT_URI = 'https://coach.ponas.dev/callback'
+const REDIRECT_URI = 'http://localhost:5173/callback';
+// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
+const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
 
 export default function Callback() {
 	const theme = useTheme();
 	const client = usePocketbase()
+	const navigate = useNavigate()
 
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<undefined | string>(undefined);
@@ -33,7 +34,7 @@ export default function Callback() {
 			.then(r => {
 				console.log(r);
 				document.cookie = client.authStore.exportToCookie();
-				window.location.href = '/';
+				navigate('/')
 			})
 			.catch((e: ClientResponseError) => {
 				setError(e.message);
