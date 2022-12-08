@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, CircularProgress, LinearProgress, Typography, useTheme } from '@mui/material';
-import PocketBaseContext from '../util/PocketbaseContext';
+import { usePocketbase } from '../util/PocketbaseContext';
 import { ErrorOutline } from '@mui/icons-material';
 
 const messages = {
@@ -22,7 +22,7 @@ const messages = {
 
 export default function SyncProgress(props: { onFinish: (error?: string) => void }) {
 	const theme = useTheme();
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	const [phase, setPhase] = useState<'connect' | 'state' | 'auth' | 'coach' | 'database'>('connect');
 	const [step, setStep] = useState<number>(0);

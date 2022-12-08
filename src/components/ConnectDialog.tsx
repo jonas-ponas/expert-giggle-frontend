@@ -11,13 +11,13 @@ import {
 	useTheme
 } from '@mui/material';
 import jsQr from 'jsqr';
-import PocketBaseContext from '../util/PocketbaseContext';
+import { usePocketbase } from '../util/PocketbaseContext';
 
 export default function ConnectDialog(props: { open: boolean; onClose: (error?: string) => void }) {
 	const theme = useTheme();
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [data, setData] = useState<string>('');
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	useEffect(() => {}, []);
 

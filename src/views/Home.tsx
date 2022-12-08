@@ -12,7 +12,7 @@ import {
 	useTheme
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import PocketBaseContext from '../util/PocketbaseContext';
+import {usePocketbase} from '../util/PocketbaseContext';
 import DirectoryTable from '../components/DirectoryTable';
 import PathBreadcrumb from '../components/PathBreadcrump';
 import SyncDialog from '../components/SyncDialog';
@@ -24,7 +24,7 @@ import { BugReportOutlined } from '@mui/icons-material';
 
 export default function Home(props: {}) {
 	const theme = useTheme();
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	const [root, setRoot] = useState<DirectoryRecord | undefined>(undefined);
 	const [showSyncDialog, setShowSyncDialog] = useState(false);
@@ -120,8 +120,8 @@ export default function Home(props: {}) {
 	return (
 		<Box
 			sx={{
-				width: '100vw',
-				height: '100vh',
+				// width: '100vw',
+				// height: '100vh',
 				bgcolor: theme.palette.grey[50],
 				display: 'flex',
 				justifyContent: 'center'

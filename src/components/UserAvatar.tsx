@@ -1,12 +1,12 @@
 import { FolderDeleteTwoTone, HelpCenterTwoTone, LogoutTwoTone } from '@mui/icons-material';
 import { Avatar, Menu, useTheme, MenuItem, IconButton, ListItemIcon } from '@mui/material';
 import React, { useContext, useState } from 'react';
-import PocketBaseContext from '../util/PocketbaseContext';
+import { usePocketbase } from '../util/PocketbaseContext';
 import InformationDialog from './InformationDialog';
 
 export default function UserAvatar(props: {}) {
 	const theme = useTheme();
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const [showInfoDialog, setShowInfoDialog] = useState(false);

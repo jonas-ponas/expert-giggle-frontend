@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, Box, Paper, Typography, useTheme, Divider, Button, Avatar } from '@mui/material';
-import PocketBaseContext from '../util/PocketbaseContext';
+import { usePocketbase } from '../util/PocketbaseContext';
 import { AuthMethodsList, AuthProviderInfo } from 'pocketbase';
 
 const GOOGLE_REDIRECT_URI = 'https://coach.ponas.dev/callback'
@@ -10,7 +10,7 @@ const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
 
 export default function Login(props: {}) {
 	const theme = useTheme();
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	const [authMethods, setAuthMethods] = useState<undefined | AuthMethodsList>(undefined);
 	const [error, setError] = useState<undefined | string>(undefined);

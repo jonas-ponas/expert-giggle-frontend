@@ -12,7 +12,7 @@ import {
 	Typography,
 	useTheme
 } from '@mui/material';
-import PocketBaseContext from '../util/PocketbaseContext';
+import { usePocketbase } from '../util/PocketbaseContext';
 import { Record } from 'pocketbase';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import FileItemRow from './FileItemRow';
@@ -20,7 +20,7 @@ import DirectoryItemRow from './DirectoryItemRow';
 
 export default function DirectoryTable({ record }: { record: Record }) {
 	const theme = useTheme();
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	const [directories, setDirectories] = useState<Record[] | undefined>(undefined);
 	const [files, setFiles] = useState<Record[] | undefined>(undefined);

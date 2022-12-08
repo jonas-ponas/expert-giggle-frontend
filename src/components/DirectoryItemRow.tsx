@@ -3,11 +3,11 @@ import { Record } from 'pocketbase';
 import { IconButton, Link, ListItemIcon, Menu, MenuItem, TableCell, TableRow, useTheme } from '@mui/material';
 import { AccountTreeTwoTone, FolderTwoTone, MoreVert, PinTwoTone, PushPinTwoTone } from '@mui/icons-material';
 import verbalizeDate from '../util/verbalizeDate';
-import PocketBaseContext from '../util/PocketbaseContext';
+import { usePocketbase } from '../util/PocketbaseContext';
 
 export default function DirectoryItemRow({ record }: { record: Record }) {
 	const theme = useTheme();
-	const client = useContext(PocketBaseContext);
+	const client = usePocketbase()
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
