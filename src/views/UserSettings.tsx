@@ -66,7 +66,7 @@ export default function UserSettings(props: {}) {
 				{state == null && (
 					<Alert variant='filled' severity='warning'>
 						<AlertTitle>Kein Coach verbunden!</AlertTitle>
-						Verbinden Sie einen Coach über den Button "Coach verbinden"
+						Verbinden Sie einen Coach über den Button "Verbinden"
 					</Alert>
 				)}
 			</Box>
