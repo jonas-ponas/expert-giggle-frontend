@@ -5,7 +5,7 @@ import Callback from './views/Callback';
 import Files from './views/Files';
 import Layout from './views/Layout';
 import Login from './views/Login';
-import Error from './components/Error';
+import ErrorAlert from './components/Error';
 
 const expand =
 	'parent,parent.parent,parent.parent.parent,parent.parent.parent.parent,parent.parent.parent.parent.parent,parent.parent.parent.parent.parent.parent';
@@ -19,6 +19,12 @@ const router = (client: pocketbaseEs) =>
 				if (!client.authStore.isValid) throw redirect('/login');
 			},
 			children: [
+				// {
+				// 	path: '/',
+				// 	loader: () => {
+				// 		throw redirect('/dir')
+				// 	}
+				// },
 				{
 					path: '/dir/:dirId',
 					element: <Files />,
@@ -29,7 +35,7 @@ const router = (client: pocketbaseEs) =>
 						return record;
 					},
 					errorElement: (
-						<Error title='Fehler' description='Das angeforderte Verzeichnis wurde nicht gefunden.' />
+						<ErrorAlert title='Fehler' description='Das angeforderte Verzeichnis wurde nicht gefunden.' />
 					)
 				},
 				{
@@ -41,7 +47,7 @@ const router = (client: pocketbaseEs) =>
 							const record = await client
 								.collection('directory')
 								.getFirstListItem<DirectoryRecord>(`parent = null`);
-							throw redirect('/dir/' + record.id)
+							throw redirect('/dir/' + record.id);
 						}
 					}
 				}
@@ -51,12 +57,28 @@ const router = (client: pocketbaseEs) =>
 			path: '/login',
 			element: <Login />,
 			loader: async () => {
-				return await client.collection('users').listAuthMethods()
+				return await client.collection('users').listAuthMethods();
 			}
 		},
 		{
 			path: '/callback/*',
-			element: <Callback />
+			element: <></>,
+			loader: async request => {
+				const url = new URL(request.request.url);
+				const code = url.searchParams.get('code');
+				const state = url.searchParams.get('state');
+				console.log(localStorage.getItem('provider'))
+				const provider = JSON.parse(localStorage.getItem('provider') || '{}');
+				if (!code || !state || !provider)
+					throw new Error('Der O-Auth Provider hat nicht genug Parameter zurückgeliefert!');
+				await client
+					?.collection('users')
+					.authWithOAuth2(provider.name, code, provider.codeVerifier, provider.redirectUrl);
+				throw redirect('/');
+			},
+			errorElement: (
+				<ErrorAlert title='Fehler!' description={`Es ist ein Fehler bei der Anmeldung unterlaufen!`} />
+			)
 		}
 	]);
 

@@ -10,6 +10,11 @@ const GOOGLE_REDIRECT_URI = 'http://localhost:5173/callback';
 const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
 // const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
 
+const REDIRECT_URI: {[key: string]: string} = {
+	'google': GOOGLE_REDIRECT_URI,
+	'github': GITHUB_REDIRECT_URI
+}
+
 export default function Login(props: {}) {
 	const theme = useTheme();
 	const loaderData = useLoaderData();
@@ -71,14 +76,16 @@ export default function Login(props: {}) {
 							}}>
 							{authMethodList &&
 								authMethodList.authProviders.map(v => {
+									let redirectUrl = REDIRECT_URI[v.name]||''
+									let combinedAuthUrl = v.authUrl + encodeURIComponent(redirectUrl)
 									switch (v.name) {
 										case 'google':
 											return (
 												<Button
 													key={v.name}
 													LinkComponent={'a'}
-													href={v.authUrl + encodeURIComponent(GOOGLE_REDIRECT_URI) || ''}
-													onClick={() => localStorage.setItem('provider', JSON.stringify(v))}
+													href={combinedAuthUrl}
+													onClick={() => localStorage.setItem('provider', JSON.stringify({...v, redirectUrl}))}
 													sx={{
 														bgcolor: theme.palette.common.white,
 														color: theme.palette.common.black,
@@ -94,8 +101,8 @@ export default function Login(props: {}) {
 												<Button
 													key={v.name}
 													LinkComponent={'a'}
-													href={v.authUrl + encodeURIComponent(GITHUB_REDIRECT_URI) || ''}
-													onClick={() => localStorage.setItem('provider', JSON.stringify(v))}
+													href={combinedAuthUrl}
+													onClick={() => localStorage.setItem('provider', JSON.stringify({...v, redirectUrl}))}
 													sx={{
 														bgcolor: theme.palette.common.black,
 														m: theme.spacing(1),
