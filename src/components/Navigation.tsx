@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItemButton, ListItemIcon, ListItemText, Paper, useTheme } from '@mui/material';
+import { List, ListItemButton, ListItemIcon, ListItemText, Paper, Tooltip, useTheme } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon';
 import { usePocketbase } from '../util/PocketbaseContext';
@@ -23,18 +23,26 @@ export default function Navigation(props: {}) {
 					</ListItemIcon>
 					<ListItemText primary='Dateien' />
 				</ListItemButton>
-				<ListItemButton disabled={true} LinkComponent={RouterLink} href='/schedule'>
+				<Tooltip title="Kommt bald (vielleicht)"  placement='right' followCursor={true}>
+					<span>
+					<ListItemButton disabled={true} LinkComponent={RouterLink} href='/schedule'>
 					<ListItemIcon>
 						<Icon name='calendar-todo' style='line' size='lg' />
 					</ListItemIcon>
 					<ListItemText primary='Stundenplan' />
 				</ListItemButton>
-				<ListItemButton disabled={true} LinkComponent={RouterLink} href='/news'>
-					<ListItemIcon>
-						<Icon name='rss' style='line' size='lg' />
-					</ListItemIcon>
-					<ListItemText primary='Coach News' />
-				</ListItemButton>
+					</span>
+				</Tooltip>
+				<Tooltip title="Kommt bald (vielleicht)" placement='right' followCursor={true}>
+					<span>
+						<ListItemButton disabled={true} LinkComponent={RouterLink} href='/news'>
+							<ListItemIcon>
+								<Icon name='rss' style='line' size='lg' />
+							</ListItemIcon>
+							<ListItemText primary='Coach News' />
+						</ListItemButton>
+					</span>
+				</Tooltip>
 			</List>
 			<List component={Paper} sx={{ mt: theme.spacing(2) }}>
 				<ListItemButton LinkComponent={RouterLink} href='/settings'>
