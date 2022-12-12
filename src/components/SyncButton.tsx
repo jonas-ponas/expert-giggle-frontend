@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Paper, Typography, useTheme } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePocketbase } from '../util/PocketbaseContext';
 import Icon from './Icon';
 
@@ -23,7 +23,7 @@ const messages = {
 
 type phases = 'connect' | 'state' | 'auth' | 'coach' | 'database' | 'done'
 
-export default function Sync(props: {}) {
+export default function Sync(props: {syncNow?: boolean, callback?: ()=>void}) {
     const theme = useTheme()
     const client = usePocketbase()
 
@@ -32,6 +32,12 @@ export default function Sync(props: {}) {
     const [step, setStep] = useState<number>(0)
     const [progress, setProgress] = useState<number>(0)
     const [error, setError] = useState<undefined|string>(undefined)
+
+	useEffect(() => {
+		if(props.syncNow) {
+			handleSync()
+		}
+	}, [props.syncNow])
 
     function handleSync() {
         setPhase('connect')
@@ -66,6 +72,7 @@ export default function Sync(props: {}) {
                         setPhase('done')
 						setTimeout(() => {
                             setIsSyncing(false)
+							if(props.callback) props.callback()
                         }, 1000);
 						return;
 					}

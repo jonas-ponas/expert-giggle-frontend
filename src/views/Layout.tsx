@@ -31,7 +31,7 @@ export default function Layout(props: {}) {
                 p: theme.spacing(2),
                 ml: 0
             }} columnSpacing={2}>
-                <Grid item lg={2}>
+                <Grid item lg={2} md={3} sm={1}>
                     <Navigation />
                     <Box sx={{
                         display: 'flex',
@@ -47,7 +47,7 @@ export default function Layout(props: {}) {
                         </Link>
                     </Box>
                 </Grid>
-                <Grid item lg={10} sx={{
+                <Grid item lg={10} md={9} sm={11} sx={{
                     height: `calc(100vh - (2 * ${theme.spacing(2)}) - 55px)`,
                     overflowY: 'auto'
                 }}>

@@ -16,7 +16,7 @@ export default function Brandbar(props: {}) {
 				display: 'flex',
 				pl: theme.spacing(2),
 				pr: theme.spacing(2),
-				boxShadow: theme.shadows[10]
+				boxShadow: theme.shadows[5]
 			}}>
 			<Box
 				sx={{

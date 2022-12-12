@@ -1,6 +1,6 @@
 import React from 'react';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, useTheme } from '@mui/material';
-import { Link as RouterLink, redirect, useNavigate } from 'react-router-dom';
+import { List, ListItemButton, ListItemIcon, ListItemText, Paper, useTheme } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon';
 import { usePocketbase } from '../util/PocketbaseContext';
 
@@ -37,7 +37,7 @@ export default function Navigation(props: {}) {
 				</ListItemButton>
 			</List>
 			<List component={Paper} sx={{ mt: theme.spacing(2) }}>
-				<ListItemButton disabled={true} LinkComponent={RouterLink} href='/settings'>
+				<ListItemButton LinkComponent={RouterLink} href='/settings'>
 					<ListItemIcon>
 						<Icon name='user-settings' style='line' size='lg' />
 					</ListItemIcon>

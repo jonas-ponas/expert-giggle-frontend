@@ -4,7 +4,7 @@ import { useLoaderData } from 'react-router-dom';
 import DirectoryTable from '../components/DirectoryTable';
 import { DirectoryRecord } from '../records';
 import { Record } from 'pocketbase';
-import Sync from '../components/Sync';
+import SyncButton from '../components/SyncButton';
 
 export default function Files(props: {}) {
     const theme = useTheme()
@@ -12,7 +12,7 @@ export default function Files(props: {}) {
 	return (
 		<Box>
 			<Box>
-				<Sync />
+				<SyncButton />
 			</Box>
 			<Box sx={{
                 mt: theme.spacing(1)

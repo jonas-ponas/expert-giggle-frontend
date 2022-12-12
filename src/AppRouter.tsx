@@ -1,11 +1,12 @@
-import pocketbaseEs from 'pocketbase';
-import { createBrowserRouter, redirect } from 'react-router-dom';
+import pocketbaseEs, { ClientResponseError } from 'pocketbase';
+import { createBrowserRouter, json, redirect } from 'react-router-dom';
 import { DirectoryRecord } from './records';
-import Callback from './views/Callback';
 import Files from './views/Files';
 import Layout from './views/Layout';
 import Login from './views/Login';
 import ErrorAlert from './components/Error';
+import UserSettings from './views/UserSettings';
+import { ThreeMpOutlined } from '@mui/icons-material';
 
 const expand =
 	'parent,parent.parent,parent.parent.parent,parent.parent.parent.parent,parent.parent.parent.parent.parent,parent.parent.parent.parent.parent.parent';
@@ -19,12 +20,6 @@ const router = (client: pocketbaseEs) =>
 				if (!client.authStore.isValid) throw redirect('/login');
 			},
 			children: [
-				// {
-				// 	path: '/',
-				// 	loader: () => {
-				// 		throw redirect('/dir')
-				// 	}
-				// },
 				{
 					path: '/dir/:dirId',
 					element: <Files />,
@@ -44,10 +39,53 @@ const router = (client: pocketbaseEs) =>
 						if (client.authStore.model?.rootDirectory) {
 							throw redirect('/dir/' + client.authStore.model?.rootDirectory);
 						} else {
-							const record = await client
+							try {
+								const record = await client
 								.collection('directory')
 								.getFirstListItem<DirectoryRecord>(`parent = null`);
-							throw redirect('/dir/' + record.id);
+								throw redirect('/dir/' + record.id);
+							} catch(e) {
+								if(e instanceof Error) {
+									console.log(e)
+									if((e as ClientResponseError).status == 404) {
+										console.log('hier!')
+										throw json({
+											name: 'Kein Wurzel-Ordner gefunden',
+											description: `Es wurde kein Wurzelordner gefunden. Haben Sie einen Coach verbunden?
+											(Ein Coach kann in den Einstellungen mit Expert-Giggle verbunden werden)`
+										})
+									}
+								}
+								throw e;
+							}
+							
+						}
+					},
+					errorElement: <ErrorAlert title='Fehler' description='Das angeforderte Verzeichnis wurde nicht gefunden.' />
+				},
+				{
+					path: '/settings',
+					element: <UserSettings />,
+					loader: async () => {
+						let rootDir = null
+						if(client.authStore.model?.rootDirectory) {
+							rootDir = await client.collection('directory').getOne(client.authStore.model?.rootDirectory)
+						}
+						try {
+							let state = await client.collection('state').getFirstListItem(`user.id = "${client.authStore.model?.id||''}"`)
+							return {
+								state, rootDir
+							}
+						} catch(e) {
+							if(e instanceof Error) {
+								if((e as ClientResponseError).status == 404) {
+									return {
+										state: null,
+										rootDir
+									}
+								}
+							}
+							throw e
 						}
 					}
 				}

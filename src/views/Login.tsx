@@ -1,18 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Container, Box, Paper, Typography, useTheme, Divider, Button, Avatar } from '@mui/material';
-import { usePocketbase } from '../util/PocketbaseContext';
-import { AuthMethodsList, AuthProviderInfo } from 'pocketbase';
+import React from 'react';
+import { Container, Box, Paper, Typography, useTheme, Button, Avatar } from '@mui/material';
+import { AuthMethodsList } from 'pocketbase';
 import Icon from '../components/Icon';
 import { useLoaderData } from 'react-router-dom';
 
-// const GOOGLE_REDIRECT_URI = 'https://coach.ponas.dev/callback'
-const GOOGLE_REDIRECT_URI = 'http://localhost:5173/callback';
-const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback/dev';
-// const GITHUB_REDIRECT_URI = 'https://coach.ponas.dev/callback'
-
 const REDIRECT_URI: {[key: string]: string} = {
-	'google': GOOGLE_REDIRECT_URI,
-	'github': GITHUB_REDIRECT_URI
+	'google': import.meta.env.VITE_GOOGLE_REDIRECT_URI||'https://coach.ponas.dev/callback',
+	'github': import.meta.env.VITE_GITHUB_REDIRECT_URI||'https://coach.ponas.dev/callback'
 }
 
 export default function Login(props: {}) {
