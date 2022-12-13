@@ -1,5 +1,5 @@
 import pocketbaseEs, { ClientResponseError } from 'pocketbase';
-import { createBrowserRouter, json, redirect } from 'react-router-dom';
+import { createBrowserRouter, json, Navigate, redirect } from 'react-router-dom';
 import { DirectoryRecord } from './records';
 import Files from './views/Files';
 import Layout from './views/Layout';
@@ -20,6 +20,10 @@ const router = (client: pocketbaseEs) =>
 				if (!client.authStore.isValid) throw redirect('/login');
 			},
 			children: [
+				{
+					path:'/',
+					element: <Navigate to='/dir' />
+				},
 				{
 					path: '/dir/:dirId',
 					element: <Files />,
