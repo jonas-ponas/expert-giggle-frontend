@@ -5,8 +5,8 @@ import Icon from '../components/Icon';
 import { useLoaderData } from 'react-router-dom';
 
 const REDIRECT_URI: {[key: string]: string} = {
-	'google': import.meta.env.VITE_GOOGLE_REDIRECT_URI||'https://coach.ponas.dev/callback',
-	'github': import.meta.env.VITE_GITHUB_REDIRECT_URI||'https://coach.ponas.dev/callback'
+	'google': import.meta.env.VITE_GOOGLE_REDIRECT_URI||'',
+	'github': import.meta.env.VITE_GITHUB_REDIRECT_URI||''
 }
 
 export default function Login(props: {}) {
@@ -70,7 +70,8 @@ export default function Login(props: {}) {
 							}}>
 							{authMethodList &&
 								authMethodList.authProviders.map(v => {
-									let redirectUrl = REDIRECT_URI[v.name]||''
+									
+									let redirectUrl = import.meta.env.MODE == 'production' ? 'https://coach.ponas.dev/callback' : REDIRECT_URI[v.name]||'' 
 									let combinedAuthUrl = v.authUrl + encodeURIComponent(redirectUrl)
 									switch (v.name) {
 										case 'google':

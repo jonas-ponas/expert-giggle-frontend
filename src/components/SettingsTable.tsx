@@ -1,8 +1,11 @@
 import {
+	Alert,
+	AlertColor,
 	Box,
 	Button,
 	Chip,
 	Paper,
+	Snackbar,
 	Table,
 	TableBody,
 	TableCell,
@@ -19,24 +22,20 @@ import { Record } from 'pocketbase';
 import Icon from './Icon';
 import ConnectDialog from './ConnectDialog';
 import Sync from './SyncButton';
+import { usePocketbase } from '../util/PocketbaseContext';
 
-export default function SettingsTable({
-	state,
-	rootDir,
-}: {
-	state: Record | null;
-	rootDir: Record | undefined;
-}) {
+export default function SettingsTable({ state, rootDir }: { state: Record | null; rootDir: Record | undefined }) {
 	const theme = useTheme();
 	const navigate = useNavigate();
+	const client = usePocketbase();
 	const [showConnectDialog, setShowConnectDialog] = useState(false);
-	const [syncNow, setSyncNow] = useState(false)
-
+	const [syncNow, setSyncNow] = useState(false);
+	const [snackbar, setSnackbar] = useState<{text: string, type: string}|undefined>(undefined)
 
 	function handleClose(success?: boolean) {
 		setShowConnectDialog(false);
-		if(success) {
-			setSyncNow(true)
+		if (success) {
+			setSyncNow(true);
 		}
 	}
 
@@ -45,8 +44,21 @@ export default function SettingsTable({
 		navigate(0);
 	}
 
-	function onRootDirRemove() {
-		
+	async function onRootDirRemove() {
+		if (!client?.authStore.model?.id) {
+			setSnackbar({type: 'error', text: 'Fehler beim Entfernen!'})
+			return;
+		}
+		try {
+			await client.collection('users').update(client.authStore.model.id, {
+				rootDirectory: null
+			});
+			navigate(0)
+		} catch(e) {
+			if(e instanceof Error) {
+				setSnackbar({type: 'error', text: e.name})
+			}
+		}
 	}
 
 	return (
@@ -62,7 +74,7 @@ export default function SettingsTable({
 					</TableHead>
 					<TableBody>
 						<TableRow>
-							<TableCell width={200}>Wurzel-Ordner</TableCell>
+							<TableCell width={150}>Wurzel-Ordner</TableCell>
 							<TableCell>
 								{rootDir == null ? (
 									<Typography variant='body2' sx={{ fontStyle: 'italic' }}>
@@ -73,8 +85,13 @@ export default function SettingsTable({
 										label={rootDir?.name}
 										variant='filled'
 										color='primary'
-										onClick={() => navigate(`/dir/${rootDir.id}`)}
 										size='small'
+										deleteIcon={
+											<Box sx={{ width: '1.5em' }}>
+												<Icon name='external-link' style='line' />
+											</Box>
+										}
+										onDelete={() => navigate(`/dir/${rootDir.id}`)}
 									/>
 								)}
 							</TableCell>
@@ -94,7 +111,7 @@ export default function SettingsTable({
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableCell width={150}>Coach</TableCell>
+							<TableCell>Coach</TableCell>
 							<TableCell>
 								{state == null ? (
 									<Chip label='Nicht verbunden' variant='filled' color='error' size='small' />
@@ -120,7 +137,7 @@ export default function SettingsTable({
 										}}>
 										Verbinden
 									</Button>
-									<Sync callback={onSyncFinished} syncNow={syncNow}/>
+									<Sync callback={onSyncFinished} syncNow={syncNow} disabled={state == null} />
 								</Box>
 							</TableCell>
 						</TableRow>
@@ -128,6 +145,18 @@ export default function SettingsTable({
 				</Table>
 			</TableContainer>
 			<ConnectDialog open={showConnectDialog} onClose={handleClose} />
+			<Snackbar
+				open={snackbar != undefined}
+				autoHideDuration={10000}
+				onClose={() => setSnackbar(undefined)}>
+				<Alert
+					variant='filled'
+					onClose={() => setSnackbar(undefined)}
+					severity={(snackbar?.type || 'info') as AlertColor}
+					sx={{ width: '100%' }}>
+					{snackbar?.text}
+				</Alert>
+			</Snackbar>
 		</>
 	);
 }
