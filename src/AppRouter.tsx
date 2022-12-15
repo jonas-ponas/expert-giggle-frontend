@@ -6,6 +6,7 @@ import Layout from './views/Layout';
 import Login from './views/Login';
 import ErrorAlert from './components/Error';
 import UserSettings from './views/UserSettings';
+import Search from './views/Search';
 
 const expand =
 	'parent,parent.parent,parent.parent.parent,parent.parent.parent.parent,parent.parent.parent.parent.parent,parent.parent.parent.parent.parent.parent';
@@ -101,7 +102,24 @@ export default (client: pocketbaseEs) =>
 							throw e;
 						}
 					}
-				}
+				},
+				{
+					path: '/search',
+					element: <Search />,
+					async loader({ request }) {
+						const url = new URL(request.url);
+						const q = url.searchParams.get('q');
+						if(!q) return [];
+
+						const inFileName = decodeURIComponent(q).split(' ').map(v => `name ~ "${v}"`).join(' || ')
+						const inDirName = decodeURIComponent(q).split(' ').map(v => `parent.name ~ "${v}"`).join(' || ')
+
+						const response = await client.collection('file').getList(0, 200, {
+							filter:  inFileName
+						})
+						return response
+					}
+				} // Add here
 			]
 		},
 		{
@@ -118,7 +136,6 @@ export default (client: pocketbaseEs) =>
 				const url = new URL(request.request.url);
 				const code = url.searchParams.get('code');
 				const state = url.searchParams.get('state');
-				console.log(localStorage.getItem('provider'));
 				const provider = JSON.parse(localStorage.getItem('provider') || '{}');
 				if (!code || !state || !provider)
 					throw new Error('Der O-Auth Provider hat nicht genug Parameter zurückgeliefert!');
