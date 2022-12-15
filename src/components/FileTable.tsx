@@ -19,24 +19,9 @@ import verbalizeFileSize from '../util/verbalizeFileSize';
 import Icon from './Icon';
 import SortableTable, { SortableTableProps } from './SortableTable';
 
-import icons from '../icons/icons';
+import icons, {iconMapping} from '../icons/icons';
 import PathBreadcrumb from './PathBreadcrump';
-const iconMapping: { [key: string]: string | undefined } = {
-	pdf: icons.pdf,
-	png: icons.img,
-	jpg: icons.img,
-	jpeg: icons.img,
-	gif: icons.img,
-	rkt: icons.rkt,
-	java: icons.java,
-	py: icons.py,
-	zip: icons.zip,
-	pptx: icons.ppt,
-	doc: icons.doc,
-	docx: icons.doc,
-	mp4: icons.video,
-	mov: icons.video
-};
+
 
 type RowData = {
 	id: string;
