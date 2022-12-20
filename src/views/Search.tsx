@@ -32,11 +32,11 @@ export function loadSearch(client: pocketbaseEs) {
 
 		const files = await client.collection('file').getList<FileRecord>(0, 200, {
 			filter: inFileName,
-			expand: 'parent'
+			expand: 'parent, parent.parent, parent.parent.parent'
 		});
 		const dirs = await client.collection('directory').getList<DirectoryRecord>(0, 200, {
 			filter: inDirName,
-			expand: 'parent'
+			expand: 'parent, parent.parent, parent.parent.parent'
 		});
 
 		return {
@@ -78,7 +78,7 @@ export default function Search(props: {}) {
 				return (
 					<Link
 						component={RouterLink}
-						to={`/dir/${row.type === 'file' ? row.directoryId : row.id}`}
+						to={`/dir/${row.type === 'file' ?  `${row.directoryId}#${row.id}` : row.id}`}
 						sx={{
 							color: theme.palette.text.primary,
 							textDecorationColor: theme.palette.text.primary
@@ -103,6 +103,15 @@ export default function Search(props: {}) {
 		}
 	];
 
+	function getPath(record: DirectoryRecord): string {
+		if(record.name == 'root') return ""
+		if (!record.expand?.parent) {
+			if (record.name) return "... /" + record.name;
+		}
+		return getPath(record.expand.parent as DirectoryRecord)+ "/" + record.name
+;
+	}
+
 	const data = [
 		...dirs.items.map(({ name, timestamp, id, collectionId, expand }: DirectoryRecord) => {
 			return {
@@ -111,7 +120,7 @@ export default function Search(props: {}) {
 				type: 'directory',
 				size: undefined,
 				id,
-				directory: (expand.parent as Record).name
+				directory: getPath(expand!!.parent as DirectoryRecord)
 			};
 		}),
 		...files.items.map(({ name, size, timestamp, id, expand }: FileRecord) => {
@@ -122,14 +131,14 @@ export default function Search(props: {}) {
 				id,
 				mime: name.split('.').at(-1),
 				directoryId: (expand.parent as Record).id,
-				directory: (expand.parent as Record).name
+				directory: getPath(expand!!.parent as DirectoryRecord)
 			};
 		})
 	];
 
 	return (
 		<Box component={Paper}>
-			<SortableTable header={tableHeaders} data={data} />
+			<SortableTable header={tableHeaders} data={data} uniqueKey='id'/>
 		</Box>
 	);
 }

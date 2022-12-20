@@ -1,12 +1,14 @@
 import { IconButton, InputBase, Paper, TextField, useTheme } from '@mui/material';
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Icon from './Icon';
 
 export default function Searchbar(props: {}) {
     const theme = useTheme()
     const inputRef = useRef<null|HTMLInputElement>(null)
     const navigate = useNavigate()
+    const [params, setParams] = useSearchParams()
+
 
 	function onSubmit(event: React.FormEvent<HTMLFormElement>|React.MouseEvent) {
         event.preventDefault()
@@ -26,6 +28,7 @@ export default function Searchbar(props: {}) {
                 size='small'
                 placeholder='Suche..'
                 margin='none'
+                defaultValue={params.get('q')||''}
                 sx={{'&> input': {p: 0}}}/>
 			<IconButton type='submit' aria-label='search' onClick={onSubmit}>
 				<Icon name='search-2' style='line' />
