@@ -6,7 +6,7 @@ import Layout from './views/Layout';
 import Login from './views/Login';
 import ErrorAlert from './components/Error';
 import UserSettings from './views/UserSettings';
-import Search from './views/Search';
+import Search, { loadSearch } from './views/Search';
 
 const expand =
 	'parent,parent.parent,parent.parent.parent,parent.parent.parent.parent,parent.parent.parent.parent.parent,parent.parent.parent.parent.parent.parent';
@@ -98,7 +98,7 @@ export default (client: pocketbaseEs) =>
 						try {
 							state = await client
 								.collection('state')
-								.getFirstListItem(`user.id = "${client.authStore.model!!.id}"`);							
+								.getFirstListItem(`user.id = "${client.authStore.model!!.id}"`);
 						} catch (e) {}
 						return {
 							state,
@@ -110,26 +110,7 @@ export default (client: pocketbaseEs) =>
 				{
 					path: '/search',
 					element: <Search />,
-					async loader({ request }) {
-						const url = new URL(request.url);
-						const q = url.searchParams.get('q');
-						if (!q) return [];
-
-						const inFileName = decodeURIComponent(q)
-							.split(' ')
-							.map(v => `name ~ "${v}"`)
-							.join(' && ');
-						const inDirName = decodeURIComponent(q)
-							.split(' ')
-							.map(v => `parent.name ~ "${v}"`)
-							.join(' && ');
-
-						const response = await client.collection('file').getList(0, 200, {
-							filter: inFileName,
-							expand
-						});
-						return response;
-					}
+					loader: loadSearch(client)
 				} // Add here
 			]
 		},
@@ -153,13 +134,13 @@ export default (client: pocketbaseEs) =>
 				let response = await client
 					?.collection('users')
 					.authWithOAuth2<UserRecord>(provider.name, code, provider.codeVerifier, provider.redirectUrl);
-				const avatarUrlChanged = response.record.avatarUrl === "" && response.meta?.avatarUrl
-				const nameChanged = response.record.name !== response.meta?.name
-				if(nameChanged || avatarUrlChanged) {
+				const avatarUrlChanged = response.record.avatarUrl === '' && response.meta?.avatarUrl;
+				const nameChanged = response.record.name !== response.meta?.name;
+				if (nameChanged || avatarUrlChanged) {
 					client.collection('users').update(response.record.id, {
-						avatarUrl: response.meta?.avatarUrl||response.record.avatarUrl,
-						name: response.meta?.name||response.record.name
-					})
+						avatarUrl: response.meta?.avatarUrl || response.record.avatarUrl,
+						name: response.meta?.name || response.record.name
+					});
 				}
 				throw redirect('/');
 			},
